@@ -56,6 +56,8 @@ var element_object = document.getElementById("ID_name");
 alert(typeof element_object); //object
 ```
 
+如果没有给定ID的对象，则返回值为`null`。
+
 ### getElementsByTagName()
 该方法返回一个对象数组，即使这个标签只有一个元素，该方法也返回一个数组，只不过数组的长度为1。
 
@@ -173,8 +175,19 @@ element.childNodes
 
 ```javascript
 var test = document.getElementByTagName("p")[0];
-text.firstChild.nodeValue = "new text"
+text.firstChild.nodeValue = "new text";
 ```
+
+为什么是这个样子而不是这个样子呢？
+
+```javascript
+text.nodeValue = "new text";
+```
+
+因为`<p>`元素本身的`nodeValue属性`是一个空值，真正需要的则是`<p>`元素所包含的文本的值。包含在`<p>`元素里的文本是另一种节点，它是`<p>`元素的第一个子节点。
+
+### nodeName属性
+
 
 ### firstChild和lastChild属性
 
@@ -183,6 +196,63 @@ text.firstChild.nodeValue = "new text"
 node.childNodes[0] <==> node.firstChild;
 node.lastNodes[node.childNodes.length-1] <==> node.lastChild; 
 ```
+
+## 共享onload事件
+
+网页加载完毕后会触发一个`onload事件`，这个事件与`window对象`相关联。
+如果需要函数在网页加载完毕之后马上执行，就需要把这个函数绑定到`onload事件`上：
+
+```javascript
+window.onload = example_function;
+```
+
+### 匿名函数
+
+如果需要多个函数绑定到`onload事件`上，可以使用匿名函数的方法：
+
+```javascript
+window.onload = function() {
+    example_function1;
+    example_function2;
+}
+/* 这种方法适合在需要绑定的函数不是很多的场合 */
+```
+
+### addLoadEvent()方法
+
+另一种常用的方法则是使用`addLoadEvent()方法`，把需要绑定的函数构建成一个队列。
+
+####  addLoadEvent()方法思路：
+
+* 把现有的`window.onload`事件处理函数的值存入变量`oldload`；
+* 如果在这个处理函数上还没有绑定任何函数，就把新函数添加给它；
+* 如果在这个处理函数上已经绑定了一些函数，就把新函数追加到现有指令的末尾。
+
+#### addLoadEvent()方法源码：
+
+```javascript
+function addLoadEvent(func) {
+    var oldonload = window.onload;
+    if(typeof window.onload != 'function') {
+        window.onload = func;
+    } else {
+        window.onload = function() {
+            oldonload();
+            func();
+        }
+    }
+}
+```
+
+#### 使用方法：
+
+```javascript
+addLoadEvent(example_function1);
+addLoadEvent(example_function2);
+```
+
+
+
 
 
 
