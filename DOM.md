@@ -188,6 +188,11 @@ text.nodeValue = "new text";
 
 ### nodeName属性
 
+`nodeName属性`指定节点的节点名称。如果节点是元素节点，则`nodeName属性`返回标签名。入股节点是属性节点，则`nodeName属性`返回属性的名称。__注意：返回的名称的字符串全部为大写的字母。__
+
+```javascript
+if(node.nodeName != "IMG") return false;
+```
 
 ### firstChild和lastChild属性
 
@@ -196,6 +201,13 @@ text.nodeValue = "new text";
 node.childNodes[0] <==> node.firstChild;
 node.lastNodes[node.childNodes.length-1] <==> node.lastChild; 
 ```
+
+### nextSibling属性
+`nextSibling`属性返回指定节点之后紧跟的节点，在相同的树层级中。被返回的节点以 Node 对象返回。如果没有 nextSibling 节点，则返回值为 null。
+
+### parentNode属性
+`parentNode属性`以Node对象的形式返回指定节点的父节点。如果指定节点没有父节点，则返回 null。
+
 
 ## 共享onload事件
 
@@ -222,13 +234,13 @@ window.onload = function() {
 
 另一种常用的方法则是使用`addLoadEvent()方法`，把需要绑定的函数构建成一个队列。
 
-####  addLoadEvent()方法思路：
+#####  addLoadEvent()方法思路：
 
 * 把现有的`window.onload`事件处理函数的值存入变量`oldload`；
 * 如果在这个处理函数上还没有绑定任何函数，就把新函数添加给它；
 * 如果在这个处理函数上已经绑定了一些函数，就把新函数追加到现有指令的末尾。
 
-#### addLoadEvent()方法源码：
+##### addLoadEvent()方法源码：
 
 ```javascript
 function addLoadEvent(func) {
@@ -244,8 +256,7 @@ function addLoadEvent(func) {
 }
 ```
 
-#### 使用方法：
-
+##### 使用方法：
 ```javascript
 addLoadEvent(example_function1);
 addLoadEvent(example_function2);
